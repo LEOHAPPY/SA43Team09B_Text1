@@ -1,0 +1,423 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="SA43TEAM09BModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Book">
+          <Key>
+            <PropertyRef Name="BookID" />
+          </Key>
+          <Property Name="BookID" Type="smallint" Nullable="false" />
+          <Property Name="ISBN" Type="nvarchar" MaxLength="255" Nullable="false" />
+          <Property Name="BookTitle" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="BookAuthor" Type="nvarchar" MaxLength="255" Nullable="false" />
+          <Property Name="BookCategory" Type="nvarchar" MaxLength="255" Nullable="false" />
+          <Property Name="BookStatus" Type="nvarchar" MaxLength="255" Nullable="false" />
+          <Property Name="BookImage" Type="nvarchar(max)" />
+        </EntityType>
+        <EntityType Name="LoanRecord">
+          <Key>
+            <PropertyRef Name="LoanID" />
+          </Key>
+          <Property Name="LoanID" Type="smallint" Nullable="false" />
+          <Property Name="MemberID" Type="smallint" Nullable="false" />
+          <Property Name="BookID" Type="smallint" Nullable="false" />
+          <Property Name="DateLoan" Type="datetime" Nullable="false" />
+          <Property Name="DateDue" Type="datetime" />
+          <Property Name="DateReturn" Type="datetime" />
+          <Property Name="Record" Type="nvarchar" MaxLength="255" />
+        </EntityType>
+        <EntityType Name="Member">
+          <Key>
+            <PropertyRef Name="MemberID" />
+          </Key>
+          <Property Name="MemberID" Type="smallint" Nullable="false" />
+          <Property Name="MemberName" Type="nvarchar" MaxLength="255" Nullable="false" />
+          <Property Name="Address" Type="nvarchar" MaxLength="255" />
+          <Property Name="Phone" Type="nvarchar" MaxLength="255" />
+          <Property Name="Email" Type="nvarchar" MaxLength="255" />
+        </EntityType>
+        <EntityType Name="Staff">
+          <Key>
+            <PropertyRef Name="StaffID" />
+          </Key>
+          <Property Name="StaffID" Type="nvarchar" MaxLength="255" Nullable="false" />
+          <Property Name="StaffName" Type="nvarchar" MaxLength="255" />
+          <Property Name="Password" Type="nvarchar" MaxLength="100" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'SA43TEAM09B.dbo.LoanRecordDesc' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="LoanRecordDesc">
+          <Key>
+            <PropertyRef Name="LoanID" />
+            <PropertyRef Name="MemberID" />
+            <PropertyRef Name="BookID" />
+            <PropertyRef Name="DateLoan" />
+          </Key>
+          <Property Name="LoanID" Type="smallint" Nullable="false" />
+          <Property Name="MemberID" Type="smallint" Nullable="false" />
+          <Property Name="BookID" Type="smallint" Nullable="false" />
+          <Property Name="DateLoan" Type="datetime" Nullable="false" />
+          <Property Name="DateDue" Type="datetime" />
+          <Property Name="DateReturn" Type="datetime" />
+          <Property Name="Record" Type="nvarchar" MaxLength="255" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'SA43TEAM09B.dbo.QuerySearchEngine' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="QuerySearchEngine">
+          <Key>
+            <PropertyRef Name="LoanID" />
+            <PropertyRef Name="MemberID" />
+            <PropertyRef Name="BookID" />
+            <PropertyRef Name="DateLoan" />
+          </Key>
+          <Property Name="LoanID" Type="smallint" Nullable="false" />
+          <Property Name="MemberID" Type="smallint" Nullable="false" />
+          <Property Name="BookID" Type="smallint" Nullable="false" />
+          <Property Name="DateLoan" Type="datetime" Nullable="false" />
+          <Property Name="DateDue" Type="datetime" />
+          <Property Name="DateReturn" Type="datetime" />
+          <Property Name="Record" Type="nvarchar" MaxLength="255" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'SA43TEAM09B.dbo.SearchEngine' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="SearchEngine">
+          <Key>
+            <PropertyRef Name="BookID" />
+            <PropertyRef Name="ISBN" />
+            <PropertyRef Name="BookTitle" />
+            <PropertyRef Name="BookAuthor" />
+            <PropertyRef Name="BookCategory" />
+            <PropertyRef Name="BookStatus" />
+          </Key>
+          <Property Name="BookID" Type="smallint" Nullable="false" />
+          <Property Name="ISBN" Type="nvarchar" MaxLength="255" Nullable="false" />
+          <Property Name="BookTitle" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="BookAuthor" Type="nvarchar" MaxLength="255" Nullable="false" />
+          <Property Name="BookCategory" Type="nvarchar" MaxLength="255" Nullable="false" />
+          <Property Name="BookStatus" Type="nvarchar" MaxLength="255" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_LoanRecord_Book">
+          <End Role="Book" Type="Self.Book" Multiplicity="1" />
+          <End Role="LoanRecord" Type="Self.LoanRecord" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Book">
+              <PropertyRef Name="BookID" />
+            </Principal>
+            <Dependent Role="LoanRecord">
+              <PropertyRef Name="BookID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_LoanRecord_Member">
+          <End Role="Member" Type="Self.Member" Multiplicity="1" />
+          <End Role="LoanRecord" Type="Self.LoanRecord" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Member">
+              <PropertyRef Name="MemberID" />
+            </Principal>
+            <Dependent Role="LoanRecord">
+              <PropertyRef Name="MemberID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="SA43TEAM09BModelStoreContainer">
+          <EntitySet Name="Book" EntityType="Self.Book" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="LoanRecord" EntityType="Self.LoanRecord" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Member" EntityType="Self.Member" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Staff" EntityType="Self.Staff" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="LoanRecordDesc" EntityType="Self.LoanRecordDesc" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+[LoanRecordDesc].[LoanID] AS [LoanID], 
+[LoanRecordDesc].[MemberID] AS [MemberID], 
+[LoanRecordDesc].[BookID] AS [BookID], 
+[LoanRecordDesc].[DateLoan] AS [DateLoan], 
+[LoanRecordDesc].[DateDue] AS [DateDue], 
+[LoanRecordDesc].[DateReturn] AS [DateReturn], 
+[LoanRecordDesc].[Record] AS [Record]
+FROM [dbo].[LoanRecordDesc] AS [LoanRecordDesc]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="QuerySearchEngine" EntityType="Self.QuerySearchEngine" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+[QuerySearchEngine].[LoanID] AS [LoanID], 
+[QuerySearchEngine].[MemberID] AS [MemberID], 
+[QuerySearchEngine].[BookID] AS [BookID], 
+[QuerySearchEngine].[DateLoan] AS [DateLoan], 
+[QuerySearchEngine].[DateDue] AS [DateDue], 
+[QuerySearchEngine].[DateReturn] AS [DateReturn], 
+[QuerySearchEngine].[Record] AS [Record]
+FROM [dbo].[QuerySearchEngine] AS [QuerySearchEngine]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="SearchEngine" EntityType="Self.SearchEngine" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+[SearchEngine].[BookID] AS [BookID], 
+[SearchEngine].[ISBN] AS [ISBN], 
+[SearchEngine].[BookTitle] AS [BookTitle], 
+[SearchEngine].[BookAuthor] AS [BookAuthor], 
+[SearchEngine].[BookCategory] AS [BookCategory], 
+[SearchEngine].[BookStatus] AS [BookStatus]
+FROM [dbo].[SearchEngine] AS [SearchEngine]</DefiningQuery>
+          </EntitySet>
+          <AssociationSet Name="FK_LoanRecord_Book" Association="Self.FK_LoanRecord_Book">
+            <End Role="Book" EntitySet="Book" />
+            <End Role="LoanRecord" EntitySet="LoanRecord" />
+          </AssociationSet>
+          <AssociationSet Name="FK_LoanRecord_Member" Association="Self.FK_LoanRecord_Member">
+            <End Role="Member" EntitySet="Member" />
+            <End Role="LoanRecord" EntitySet="LoanRecord" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="SA43TEAM09BModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Book">
+          <Key>
+            <PropertyRef Name="BookID" />
+          </Key>
+          <Property Name="BookID" Type="Int16" Nullable="false" />
+          <Property Name="ISBN" Type="String" MaxLength="255" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="BookTitle" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="BookAuthor" Type="String" MaxLength="255" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="BookCategory" Type="String" MaxLength="255" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="BookStatus" Type="String" MaxLength="255" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="BookImage" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="LoanRecords" Relationship="Self.FK_LoanRecord_Book" FromRole="Book" ToRole="LoanRecord" />
+        </EntityType>
+        <EntityType Name="LoanRecord">
+          <Key>
+            <PropertyRef Name="LoanID" />
+          </Key>
+          <Property Name="LoanID" Type="Int16" Nullable="false" />
+          <Property Name="MemberID" Type="Int16" Nullable="false" />
+          <Property Name="BookID" Type="Int16" Nullable="false" />
+          <Property Name="DateLoan" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="DateDue" Type="DateTime" Precision="3" />
+          <Property Name="DateReturn" Type="DateTime" Precision="3" />
+          <Property Name="Record" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Book" Relationship="Self.FK_LoanRecord_Book" FromRole="LoanRecord" ToRole="Book" />
+          <NavigationProperty Name="Member" Relationship="Self.FK_LoanRecord_Member" FromRole="LoanRecord" ToRole="Member" />
+        </EntityType>
+        <EntityType Name="Member">
+          <Key>
+            <PropertyRef Name="MemberID" />
+          </Key>
+          <Property Name="MemberID" Type="Int16" Nullable="false" />
+          <Property Name="MemberName" Type="String" MaxLength="255" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Address" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="Phone" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="Email" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="LoanRecords" Relationship="Self.FK_LoanRecord_Member" FromRole="Member" ToRole="LoanRecord" />
+        </EntityType>
+        <EntityType Name="Staff">
+          <Key>
+            <PropertyRef Name="StaffID" />
+          </Key>
+          <Property Name="StaffID" Type="String" MaxLength="255" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="StaffName" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="Password" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="LoanRecordDesc">
+          <Key>
+            <PropertyRef Name="LoanID" />
+            <PropertyRef Name="MemberID" />
+            <PropertyRef Name="BookID" />
+            <PropertyRef Name="DateLoan" />
+          </Key>
+          <Property Name="LoanID" Type="Int16" Nullable="false" />
+          <Property Name="MemberID" Type="Int16" Nullable="false" />
+          <Property Name="BookID" Type="Int16" Nullable="false" />
+          <Property Name="DateLoan" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="DateDue" Type="DateTime" Precision="3" />
+          <Property Name="DateReturn" Type="DateTime" Precision="3" />
+          <Property Name="Record" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="QuerySearchEngine">
+          <Key>
+            <PropertyRef Name="LoanID" />
+            <PropertyRef Name="MemberID" />
+            <PropertyRef Name="BookID" />
+            <PropertyRef Name="DateLoan" />
+          </Key>
+          <Property Name="LoanID" Type="Int16" Nullable="false" />
+          <Property Name="MemberID" Type="Int16" Nullable="false" />
+          <Property Name="BookID" Type="Int16" Nullable="false" />
+          <Property Name="DateLoan" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="DateDue" Type="DateTime" Precision="3" />
+          <Property Name="DateReturn" Type="DateTime" Precision="3" />
+          <Property Name="Record" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="SearchEngine">
+          <Key>
+            <PropertyRef Name="BookID" />
+            <PropertyRef Name="ISBN" />
+            <PropertyRef Name="BookTitle" />
+            <PropertyRef Name="BookAuthor" />
+            <PropertyRef Name="BookCategory" />
+            <PropertyRef Name="BookStatus" />
+          </Key>
+          <Property Name="BookID" Type="Int16" Nullable="false" />
+          <Property Name="ISBN" Type="String" MaxLength="255" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="BookTitle" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="BookAuthor" Type="String" MaxLength="255" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="BookCategory" Type="String" MaxLength="255" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="BookStatus" Type="String" MaxLength="255" FixedLength="false" Unicode="true" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_LoanRecord_Book">
+          <End Role="Book" Type="Self.Book" Multiplicity="1" />
+          <End Role="LoanRecord" Type="Self.LoanRecord" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Book">
+              <PropertyRef Name="BookID" />
+            </Principal>
+            <Dependent Role="LoanRecord">
+              <PropertyRef Name="BookID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_LoanRecord_Member">
+          <End Role="Member" Type="Self.Member" Multiplicity="1" />
+          <End Role="LoanRecord" Type="Self.LoanRecord" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Member">
+              <PropertyRef Name="MemberID" />
+            </Principal>
+            <Dependent Role="LoanRecord">
+              <PropertyRef Name="MemberID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="SA43TEAM09BEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Books" EntityType="Self.Book" />
+          <EntitySet Name="LoanRecords" EntityType="Self.LoanRecord" />
+          <EntitySet Name="Members" EntityType="Self.Member" />
+          <EntitySet Name="Staffs" EntityType="Self.Staff" />
+          <EntitySet Name="LoanRecordDescs" EntityType="Self.LoanRecordDesc" />
+          <EntitySet Name="QuerySearchEngines" EntityType="Self.QuerySearchEngine" />
+          <EntitySet Name="SearchEngines" EntityType="Self.SearchEngine" />
+          <AssociationSet Name="FK_LoanRecord_Book" Association="Self.FK_LoanRecord_Book">
+            <End Role="Book" EntitySet="Books" />
+            <End Role="LoanRecord" EntitySet="LoanRecords" />
+          </AssociationSet>
+          <AssociationSet Name="FK_LoanRecord_Member" Association="Self.FK_LoanRecord_Member">
+            <End Role="Member" EntitySet="Members" />
+            <End Role="LoanRecord" EntitySet="LoanRecords" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="SA43TEAM09BModelStoreContainer" CdmEntityContainer="SA43TEAM09BEntities">
+          <EntitySetMapping Name="Books">
+            <EntityTypeMapping TypeName="SA43TEAM09BModel.Book">
+              <MappingFragment StoreEntitySet="Book">
+                <ScalarProperty Name="BookID" ColumnName="BookID" />
+                <ScalarProperty Name="ISBN" ColumnName="ISBN" />
+                <ScalarProperty Name="BookTitle" ColumnName="BookTitle" />
+                <ScalarProperty Name="BookAuthor" ColumnName="BookAuthor" />
+                <ScalarProperty Name="BookCategory" ColumnName="BookCategory" />
+                <ScalarProperty Name="BookStatus" ColumnName="BookStatus" />
+                <ScalarProperty Name="BookImage" ColumnName="BookImage" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="LoanRecords">
+            <EntityTypeMapping TypeName="SA43TEAM09BModel.LoanRecord">
+              <MappingFragment StoreEntitySet="LoanRecord">
+                <ScalarProperty Name="LoanID" ColumnName="LoanID" />
+                <ScalarProperty Name="MemberID" ColumnName="MemberID" />
+                <ScalarProperty Name="BookID" ColumnName="BookID" />
+                <ScalarProperty Name="DateLoan" ColumnName="DateLoan" />
+                <ScalarProperty Name="DateDue" ColumnName="DateDue" />
+                <ScalarProperty Name="DateReturn" ColumnName="DateReturn" />
+                <ScalarProperty Name="Record" ColumnName="Record" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Members">
+            <EntityTypeMapping TypeName="SA43TEAM09BModel.Member">
+              <MappingFragment StoreEntitySet="Member">
+                <ScalarProperty Name="MemberID" ColumnName="MemberID" />
+                <ScalarProperty Name="MemberName" ColumnName="MemberName" />
+                <ScalarProperty Name="Address" ColumnName="Address" />
+                <ScalarProperty Name="Phone" ColumnName="Phone" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Staffs">
+            <EntityTypeMapping TypeName="SA43TEAM09BModel.Staff">
+              <MappingFragment StoreEntitySet="Staff">
+                <ScalarProperty Name="StaffID" ColumnName="StaffID" />
+                <ScalarProperty Name="StaffName" ColumnName="StaffName" />
+                <ScalarProperty Name="Password" ColumnName="Password" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="LoanRecordDescs">
+            <EntityTypeMapping TypeName="SA43TEAM09BModel.LoanRecordDesc">
+              <MappingFragment StoreEntitySet="LoanRecordDesc">
+                <ScalarProperty Name="LoanID" ColumnName="LoanID" />
+                <ScalarProperty Name="MemberID" ColumnName="MemberID" />
+                <ScalarProperty Name="BookID" ColumnName="BookID" />
+                <ScalarProperty Name="DateLoan" ColumnName="DateLoan" />
+                <ScalarProperty Name="DateDue" ColumnName="DateDue" />
+                <ScalarProperty Name="DateReturn" ColumnName="DateReturn" />
+                <ScalarProperty Name="Record" ColumnName="Record" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="QuerySearchEngines">
+            <EntityTypeMapping TypeName="SA43TEAM09BModel.QuerySearchEngine">
+              <MappingFragment StoreEntitySet="QuerySearchEngine">
+                <ScalarProperty Name="LoanID" ColumnName="LoanID" />
+                <ScalarProperty Name="MemberID" ColumnName="MemberID" />
+                <ScalarProperty Name="BookID" ColumnName="BookID" />
+                <ScalarProperty Name="DateLoan" ColumnName="DateLoan" />
+                <ScalarProperty Name="DateDue" ColumnName="DateDue" />
+                <ScalarProperty Name="DateReturn" ColumnName="DateReturn" />
+                <ScalarProperty Name="Record" ColumnName="Record" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="SearchEngines">
+            <EntityTypeMapping TypeName="SA43TEAM09BModel.SearchEngine">
+              <MappingFragment StoreEntitySet="SearchEngine">
+                <ScalarProperty Name="BookID" ColumnName="BookID" />
+                <ScalarProperty Name="ISBN" ColumnName="ISBN" />
+                <ScalarProperty Name="BookTitle" ColumnName="BookTitle" />
+                <ScalarProperty Name="BookAuthor" ColumnName="BookAuthor" />
+                <ScalarProperty Name="BookCategory" ColumnName="BookCategory" />
+                <ScalarProperty Name="BookStatus" ColumnName="BookStatus" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="true" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
